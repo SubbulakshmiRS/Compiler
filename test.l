@@ -24,8 +24,9 @@ alpha       ([a-zA-Z])+
 "{"     {return (CBOPEN);}
 "}"     {return (CBCLOSE);}
 "<"|">"|">="|"<="   {sscanf(yytext, "%s", yylval.roperator);return (ROP);}
-"+"|"-"|"*"|"/"|"&&"|"||"    {sscanf(yytext, "%s", yylval.boperator); return (BOP);}
-"++"|"--"|"!"   {sscanf(yytext, "%s", yylval.uoperator);return (UOP);}
+"+"|"-"  {sscanf(yytext, "%s", yylval.operator); return (OP);}   
+"*"|"/"|"&&"|"||"    {sscanf(yytext, "%s", yylval.boperator); return (BOP);}
+"++"|"--"|"!"  {sscanf(yytext, "%s", yylval.uoperator);return (UOP);}
 int|bool|float|char|string|void  {sscanf(yytext, "%s", yylval.dtype); return (DTYPE);}
 while   {return (WHILE);}
 for     {return (FOR);}

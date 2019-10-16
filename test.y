@@ -7,7 +7,7 @@ int yyerror(char *s);
 
 %}
 
-%token STRING INT OTHER SEMICOLON BOP UOP ROP BREAK 
+%token STRING INT OTHER SEMICOLON BOP UOP ROP OP BREAK 
 %token CONTINUE RETURN INPUT BOPEN BCLOSE STOP
 %token OUTPUT CBOPEN CBCLOSE DTYPE QMARK BOOL FLOAT
 %token COLON EQUAL COMMA IF ELSE WHILE FOR SBOPEN SBCLOSE
@@ -18,6 +18,7 @@ int yyerror(char *s);
 %type <boperator> BOP 
 %type <uoperator> UOP 
 %type <roperator> ROP
+%type <operator> OP
 
 
 
@@ -29,6 +30,7 @@ int yyerror(char *s);
     char boperator[3];
     char uoperator[3];
     char roperator[3];
+    char operator[3];
     char dtype[20];
 }
 
@@ -58,8 +60,8 @@ stmt:
     |   CONTINUE SEMICOLON
     |   RETURN SEMICOLON
     |   RETURN expr SEMICOLON
-    |   INPUT BOPEN STRING BCLOSE SEMICOLON
-    |   OUTPUT BOPEN STRING BCLOSE SEMICOLON
+    |   INPUT BOPEN variable BCLOSE SEMICOLON
+    |   OUTPUT BOPEN variable BCLOSE SEMICOLON
     |   SEMICOLON
 ;
 
@@ -71,31 +73,30 @@ function_decl:
     DTYPE STRING BOPEN paramD_list BCLOSE block
 ;
 variable_decl:
-    DTYPE STRING SEMICOLON
+    DTYPE variable SEMICOLON
 ;
 
 expr:  
     BOPEN expr BCLOSE
     |   expr BOP expr
+    |   expr OP expr
+    |   OP expr
     |   UOP expr
     |   expr QMARK expr COLON expr
     |   expr ROP expr
     |   functionCall
-    |   STRING
-    |   INT
-    |   BOOL
-    |   FLOAT
+    |   param
 ;
 
 assignStmt: 
-    STRING EQUAL expr SEMICOLON
-    | DTYPE STRING EQUAL expr SEMICOLON
+    variable EQUAL expr SEMICOLON
+    | DTYPE variable EQUAL expr SEMICOLON
 ;
 
 functionCall:
     STRING BOPEN BCLOSE SEMICOLON
     |   STRING BOPEN param_list BCLOSE SEMICOLON
-    |   STRING EQUAL STRING BOPEN param_list BCLOSE SEMICOLON
+    |   variable EQUAL STRING BOPEN param_list BCLOSE SEMICOLON
     |   RETURN STRING BOPEN param_list BCLOSE SEMICOLON
 ;
 
@@ -112,13 +113,21 @@ forStmt:
     FOR BOPEN assignStmt expr SEMICOLON assignStmt BCLOSE block
 ;
 
+variable: 
+    STRING
+    |   STRING SBOPEN STRING SBCLOSE 
+    |   STRING SBOPEN STRING SBCLOSE SBOPEN STRING SBCLOSE
+    |   STRING SBOPEN INT SBCLOSE 
+    |   STRING SBOPEN INT SBCLOSE SBOPEN INT SBCLOSE
+;
+
 param_list:
     param COMMA param_list  
     |   param
 ;
 
 param:
-    STRING
+    variable
     |   INT
     |   BOOL
     |   FLOAT
