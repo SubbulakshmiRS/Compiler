@@ -93,7 +93,8 @@ assignStmt:
 ;
 
 functionCall:
-    STRING BOPEN param_list BCLOSE SEMICOLON
+    STRING BOPEN BCLOSE SEMICOLON
+    |   STRING BOPEN param_list BCLOSE SEMICOLON
     |   STRING EQUAL STRING BOPEN param_list BCLOSE SEMICOLON
     |   RETURN STRING BOPEN param_list BCLOSE SEMICOLON
 ;
@@ -127,7 +128,7 @@ paramD_list:
     paramD COMMA paramD_list  
     |   paramD
 ;
-$
+
 
 paramD:
     DTYPE param 

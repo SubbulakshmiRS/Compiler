@@ -40,33 +40,11 @@ true|false  { yylval.bvalue=0; if(yytext=="true") yylval.bvalue = 1; return (BOO
 {numbers}      {yylval.number = atoi(yytext); return (INT);}
 ";"      		   {return (SEMICOLON);}
 [ \t\n]+          /* eat up whitespace */
-.      		     {printf("what is it: %s\n",yytext);showError(); return(OTHER);}
+.      		     {printf("unrecognized: %s\n",yytext);showError(); return(OTHER);}
 
 %%
 
 
 void showError(){
-    printf("Other input");
+    printf("\nerror\n");
 }
-
-// void findBOp(string text)
-// {
-//     switch(text)
-//     {
-//         case "+":
-
-//                 Break;
-//         case "-":
-//                 Block-2;
-//                 Break;
-//         case "/":
-//                 Block-n;
-//                 Break;
-//         case "*":
-//                 Block-n;
-//                 Break;              
-//         default:
-//                 Block-1;
-//                 Break;
-//     }
-// }
