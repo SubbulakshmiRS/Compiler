@@ -7,13 +7,13 @@ int yyerror(char *s);
 
 %}
 
-%token STRING NUM OTHER SEMICOLON OP ROP COP BREAK 
-%token CONTINUE RETURN INPUT BOPEN BCLOSE
+%token STRING NUM OTHER SEMICOLON ABOP AUOP ROP CBOP CUOP BREAK 
+%token CONTINUE RETURN INPUT BOPEN BCLOSE STOP
 %token OUTPUT CBOPEN CBCLOSE DTYPE QMARK
 %token COLON EQUAL COMMA IF ELSE WHILE FOR SBOPEN SBCLOSE
 %type <name> STRING
 %type <number> NUM
-%type <operator> OP 
+%type <operator> ABOP 
 
 %union{
 	  char name[20];
@@ -25,18 +25,14 @@ int yyerror(char *s);
 %%
 
 prog:
-  stmts{
+  stmts STOP{
       printf("\nSuccessful parsing1\n");
   }
 ;
 
 stmts:
-    stmt stmts{
-        printf("\nSuccessful parsing2\n");
-    }
-    |   stmt{
-        printf("\nSuccessful parsing3\n");
-    }
+    stmt stmts
+    |   stmt
 
 ;
 
@@ -45,13 +41,9 @@ stmt:
     |   variable_decl
     |   assignStmt
     |   functionCall 
-    |   ifStmt{
-        printf("if statement\n");
-    }
+    |   ifStmt
     |   whileStmt
-    |   forStmt{
-        printf("for statement\n");
-    }
+    |   forStmt
     |   BREAK SEMICOLON
     |   CONTINUE SEMICOLON
     |   RETURN SEMICOLON
@@ -62,9 +54,7 @@ stmt:
 ;
 
 block:
-    CBOPEN stmts CBCLOSE{
-        printf("block\n");
-    }
+    CBOPEN stmts CBCLOSE
 ;
 
 function_decl:
@@ -76,21 +66,20 @@ variable_decl:
 
 expr:  
     BOPEN expr BCLOSE
-    |   expr COP expr
-    |   expr OP expr
+    |   expr CBOP expr
+    |   CUOP expr
+    |   AUOP expr
+    |   expr ABOP expr
+    |   expr QMARK expr COLON expr
     |   expr ROP expr
     |   expr QMARK expr COLON expr
     |   functionCall
     |   STRING
-    |   NUM{
-        printf("num\n");
-    }
+    |   NUM
 ;
 
 assignStmt: 
-    STRING EQUAL expr SEMICOLON{
-        printf("assign here");
-    }
+    STRING EQUAL expr SEMICOLON
     | DTYPE STRING EQUAL expr SEMICOLON
 ;
 
@@ -101,9 +90,7 @@ functionCall:
 ;
 
 ifStmt:
-    IF BOPEN expr BCLOSE block{
-        printf("no else\n");
-    } 
+    IF BOPEN expr BCLOSE block
     |   IF BOPEN expr BCLOSE block ELSE block
 ;
 
@@ -113,9 +100,6 @@ whileStmt:
 
 forStmt:
     FOR BOPEN assignStmt expr SEMICOLON assignStmt BCLOSE block
-    {
-        printf("here\n");
-    }
 ;
 
 param_list:

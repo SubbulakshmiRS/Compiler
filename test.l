@@ -12,23 +12,26 @@ numbers     ([0-9])+
 alpha       ([a-zA-Z])+
 
 %%
+"$"     {return (STOP);}
 "="     {return (EQUAL);}
 "?"     {return (QMARK);}
 ":"     {return (COLON);}
 ","     {return (COMMA);}
-"("     {printf("dw ");return (BOPEN);}
+"("     {return (BOPEN);}
 ")"     {return (BCLOSE);}
 "["     {return (SBOPEN);}
 "]"     {return (SBCLOSE);}
 "{"     {return (CBOPEN);}
 "}"     {return (CBCLOSE);}
 "<"|">"|">="|"<=" {return (ROP);}
-"&&"|"||"   {return (COP);}
-"+"|"-"|"*"|"/"     {yylval.operator = yytext[0]; return (OP);}
+"&&"|"||"   {return (CBOP);}
+"!"     {return (CUOP);}
+"+"|"-"|"*"|"/"     {yylval.operator = yytext[0]; return (ABOP);}
+"++"|"--"   {return (AUOP);}
 int|char|string|void  {sscanf(yytext, "%s", yylval.dtype); return (DTYPE);}
 while   { return (WHILE);}
 for     {return (FOR);}
-if      {printf("djabs ");return (IF);}
+if      {return (IF);}
 else    {return (WHILE);}   
 input   {return (INPUT);}
 output  {return (OUTPUT);}
