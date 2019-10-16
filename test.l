@@ -27,7 +27,7 @@ alpha       ([a-zA-Z])+
 "+"|"-"|"*"|"/"|"&&"|"||"    {sscanf(yytext, "%s", yylval.boperator); return (BOP);}
 "++"|"--"|"!"   {sscanf(yytext, "%s", yylval.uoperator);return (UOP);}
 int|bool|float|char|string|void  {sscanf(yytext, "%s", yylval.dtype); return (DTYPE);}
-while   { return (WHILE);}
+while   {return (WHILE);}
 for     {return (FOR);}
 if      {return (IF);}
 else    {return (WHILE);}   

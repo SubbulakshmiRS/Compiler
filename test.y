@@ -36,7 +36,7 @@ int yyerror(char *s);
 
 prog:
   stmts STOP{
-      printf("\nSuccessful parsing1\n");
+      printf("\nSuccessful parsing\n");
   }
 ;
 
@@ -68,7 +68,7 @@ block:
 ;
 
 function_decl:
-    DTYPE STRING BOPEN param_list BCLOSE block SEMICOLON
+    DTYPE STRING BOPEN paramD_list BCLOSE block
 ;
 variable_decl:
     DTYPE STRING SEMICOLON
@@ -117,8 +117,23 @@ param_list:
 ;
 
 param:
-    DTYPE STRING 
+    STRING
+    |   INT
+    |   BOOL
+    |   FLOAT
 ;
+
+paramD_list:
+    paramD COMMA paramD_list  
+    |   paramD
+;
+$
+
+paramD:
+    DTYPE param 
+;
+
+
 
 %%
 
