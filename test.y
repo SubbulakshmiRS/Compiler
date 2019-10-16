@@ -7,18 +7,28 @@ int yyerror(char *s);
 
 %}
 
-%token STRING NUM OTHER SEMICOLON ABOP AUOP ROP CBOP CUOP BREAK 
+%token STRING INT OTHER SEMICOLON BOP UOP ROP BREAK 
 %token CONTINUE RETURN INPUT BOPEN BCLOSE STOP
-%token OUTPUT CBOPEN CBCLOSE DTYPE QMARK
+%token OUTPUT CBOPEN CBCLOSE DTYPE QMARK BOOL FLOAT
 %token COLON EQUAL COMMA IF ELSE WHILE FOR SBOPEN SBCLOSE
 %type <name> STRING
-%type <number> NUM
-%type <operator> ABOP 
+%type <number> INT
+%type <fnumber> FLOAT
+%type <bvalue> BOOL
+%type <boperator> BOP 
+%type <uoperator> UOP 
+%type <roperator> ROP
+
+
 
 %union{
 	  char name[20];
     int number;
-    char operator;
+    float fnumber;
+    int bvalue;
+    char boperator[3];
+    char uoperator[3];
+    char roperator[3];
     char dtype[20];
 }
 
@@ -66,16 +76,15 @@ variable_decl:
 
 expr:  
     BOPEN expr BCLOSE
-    |   expr CBOP expr
-    |   CUOP expr
-    |   AUOP expr
-    |   expr ABOP expr
+    |   expr BOP expr
+    |   UOP expr
     |   expr QMARK expr COLON expr
     |   expr ROP expr
-    |   expr QMARK expr COLON expr
     |   functionCall
     |   STRING
-    |   NUM
+    |   INT
+    |   BOOL
+    |   FLOAT
 ;
 
 assignStmt: 
