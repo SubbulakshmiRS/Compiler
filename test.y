@@ -37,32 +37,32 @@ int yyerror(char *s);
 %%
 
 prog:
-  stmts STOP{
+    stmts STOP{
       printf("\nSuccessful parsing\n");
   }
 ;
 
 stmts:
     stmt stmts
-    |   stmt
+    |stmt
 
 ;
 
 stmt:
     function_decl
-    |   variable_decl
-    |   assignStmt
-    |   functionCall 
-    |   ifStmt
-    |   whileStmt
-    |   forStmt
-    |   BREAK SEMICOLON
-    |   CONTINUE SEMICOLON
-    |   RETURN SEMICOLON
-    |   RETURN expr SEMICOLON
-    |   INPUT BOPEN variable BCLOSE SEMICOLON
-    |   OUTPUT BOPEN variable BCLOSE SEMICOLON
-    |   SEMICOLON
+    |variable_decl
+    |assignStmt
+    |functionCall 
+    |ifStmt
+    |whileStmt
+    |forStmt
+    |BREAK SEMICOLON
+    |CONTINUE SEMICOLON
+    |RETURN SEMICOLON
+    |RETURN expr SEMICOLON
+    |INPUT BOPEN variable BCLOSE SEMICOLON
+    |OUTPUT BOPEN variable BCLOSE SEMICOLON
+    |SEMICOLON
 ;
 
 block:
@@ -78,31 +78,31 @@ variable_decl:
 
 expr:  
     BOPEN expr BCLOSE
-    |   expr BOP expr
-    |   expr OP expr
-    |   OP expr
-    |   UOP expr
-    |   expr QMARK expr COLON expr
-    |   expr ROP expr
-    |   functionCall
-    |   param
+    |expr BOP expr
+    |expr OP expr
+    |OP expr
+    |UOP expr
+    |expr QMARK expr COLON expr
+    |expr ROP expr
+    |functionCall
+    |param
 ;
 
 assignStmt: 
     variable EQUAL expr SEMICOLON
-    | DTYPE variable EQUAL expr SEMICOLON
+    |DTYPE variable EQUAL expr SEMICOLON
 ;
 
 functionCall:
     STRING BOPEN BCLOSE SEMICOLON
-    |   STRING BOPEN param_list BCLOSE SEMICOLON
-    |   variable EQUAL STRING BOPEN param_list BCLOSE SEMICOLON
-    |   RETURN STRING BOPEN param_list BCLOSE SEMICOLON
+    |STRING BOPEN param_list BCLOSE SEMICOLON
+    |variable EQUAL STRING BOPEN param_list BCLOSE SEMICOLON
+    |RETURN STRING BOPEN param_list BCLOSE SEMICOLON
 ;
 
 ifStmt:
     IF BOPEN expr BCLOSE block
-    |   IF BOPEN expr BCLOSE block ELSE block
+    |IF BOPEN expr BCLOSE block ELSE block
 ;
 
 whileStmt:
@@ -115,27 +115,27 @@ forStmt:
 
 variable: 
     STRING
-    |   STRING SBOPEN STRING SBCLOSE 
-    |   STRING SBOPEN STRING SBCLOSE SBOPEN STRING SBCLOSE
-    |   STRING SBOPEN INT SBCLOSE 
-    |   STRING SBOPEN INT SBCLOSE SBOPEN INT SBCLOSE
+    |STRING SBOPEN STRING SBCLOSE 
+    |STRING SBOPEN STRING SBCLOSE SBOPEN STRING SBCLOSE
+    |STRING SBOPEN INT SBCLOSE 
+    |STRING SBOPEN INT SBCLOSE SBOPEN INT SBCLOSE
 ;
 
 param_list:
     param COMMA param_list  
-    |   param
+    |param
 ;
 
 param:
     variable
-    |   INT
-    |   BOOL
-    |   FLOAT
+    |INT
+    |BOOL
+    |FLOAT
 ;
 
 paramD_list:
     paramD COMMA paramD_list  
-    |   paramD
+    |paramD
 ;
 
 
