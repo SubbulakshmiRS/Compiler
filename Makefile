@@ -1,7 +1,7 @@
 all: test
 
 test.tab.c test.tab.h:	test.y
-	bison -d test.y
+	bison -v test.y
 
 lex.yy.c: test.l test.tab.h
 	flex test.l

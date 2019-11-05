@@ -24,14 +24,16 @@ alpha       ([a-zA-Z])+
 "{"     {return (CBOPEN);}
 "}"     {return (CBCLOSE);}
 "<"|">"|">="|"<="   {sscanf(yytext, "%s", yylval.roperator);return (ROP);}
-"+"|"-"  {sscanf(yytext, "%s", yylval.operator); return (OP);}   
-"*"|"/"|"&&"|"||"    {sscanf(yytext, "%s", yylval.boperator); return (BOP);}
-"++"|"--"|"!"  {sscanf(yytext, "%s", yylval.uoperator);return (UOP);}
+"+"|"-"  {sscanf(yytext, "%s", yylval.aoperator); return (AOP);}   
+"*"|"/"   {sscanf(yytext, "%s", yylval.aboperator); return (ABOP);}
+"&&"|"||"   {sscanf(yytext, "%s", yylval.boperator); return (BOP);}  
+"!"  {sscanf(yytext, "%s", yylval.uoperator);return (UOP);}
 int|bool|float|char|string|void  {sscanf(yytext, "%s", yylval.dtype); return (DTYPE);}
 while   {return (WHILE);}
 for     {return (FOR);}
 if      {return (IF);}
-else    {return (WHILE);}   
+else    {return (WHILE);} 
+endif   {return (ENDIF);}  
 input   {return (INPUT);}
 output  {return (OUTPUT);}
 return  {return (RETURN);}

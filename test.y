@@ -7,20 +7,26 @@ int yyerror(char *s);
 
 %}
 
-%token STRING INT OTHER SEMICOLON BOP UOP ROP OP BREAK 
+%token STRING INT OTHER SEMICOLON AOP ABOP BOP UOP ROP BREAK 
 %token CONTINUE RETURN INPUT BOPEN BCLOSE STOP
 %token OUTPUT CBOPEN CBCLOSE DTYPE QMARK BOOL FLOAT
-%token COLON EQUAL COMMA IF ELSE WHILE FOR SBOPEN SBCLOSE
+%token COLON EQUAL COMMA IF ELSE  ENDIF WHILE FOR SBOPEN SBCLOSE
 %type <name> STRING
 %type <number> INT
 %type <fnumber> FLOAT
 %type <bvalue> BOOL
 %type <boperator> BOP 
 %type <uoperator> UOP 
-%type <roperator> ROP
-%type <operator> OP
+%type <aoperator> AOP
+%type <aboperator> ABOP
 
-
+%left <roperator> ROP
+%left AOP
+%left ABOP
+%right U
+%right QMARK
+%right UOP
+%right BOP
 
 %union{
 	  char name[20];
@@ -30,7 +36,8 @@ int yyerror(char *s);
     char boperator[3];
     char uoperator[3];
     char roperator[3];
-    char operator[3];
+    char aoperator[3];
+    char aboperator[3];
     char dtype[20];
 }
 
@@ -52,7 +59,7 @@ stmt:
     function_decl
     |variable_decl
     |assignStmt
-    |functionCall 
+    |functionCall SEMICOLON
     |ifStmt
     |whileStmt
     |forStmt
@@ -76,16 +83,17 @@ variable_decl:
     DTYPE variable SEMICOLON
 ;
 
-expr:  
-    BOPEN expr BCLOSE
-    |expr BOP expr
-    |expr OP expr
-    |OP expr
-    |UOP expr
-    |expr QMARK expr COLON expr
+expr: 
+    UOP expr %prec UOP
+    |expr BOP expr %prec BOP
+    |expr QMARK expr COLON expr %prec QMARK
     |expr ROP expr
-    |functionCall
+    |expr AOP expr
+    |expr ABOP expr
+    |BOPEN expr BCLOSE
+    |AOP expr %prec U
     |param
+    |functionCall
 ;
 
 assignStmt: 
@@ -94,15 +102,13 @@ assignStmt:
 ;
 
 functionCall:
-    STRING BOPEN BCLOSE SEMICOLON
-    |STRING BOPEN param_list BCLOSE SEMICOLON
-    |variable EQUAL STRING BOPEN param_list BCLOSE SEMICOLON
-    |RETURN STRING BOPEN param_list BCLOSE SEMICOLON
+    STRING BOPEN BCLOSE
+    |STRING BOPEN param_list BCLOSE
 ;
 
 ifStmt:
-    IF BOPEN expr BCLOSE block
-    |IF BOPEN expr BCLOSE block ELSE block
+    IF BOPEN expr BCLOSE block ENDIF
+    |IF BOPEN expr BCLOSE block ELSE block ENDIF
 ;
 
 whileStmt:
@@ -113,12 +119,14 @@ forStmt:
     FOR BOPEN assignStmt expr SEMICOLON assignStmt BCLOSE block
 ;
 
-variable: 
-    STRING
-    |STRING SBOPEN STRING SBCLOSE 
-    |STRING SBOPEN STRING SBCLOSE SBOPEN STRING SBCLOSE
+variable:
+    STRING SBOPEN INT SBCLOSE SBOPEN INT SBCLOSE
+    |STRING SBOPEN INT SBCLOSE SBOPEN STRING SBCLOSE
+    |STRING SBOPEN STRING SBCLOSE SBOPEN INT SBCLOSE
+    |STRING SBOPEN STRING SBCLOSE SBOPEN STRING SBCLOSE 
     |STRING SBOPEN INT SBCLOSE 
-    |STRING SBOPEN INT SBCLOSE SBOPEN INT SBCLOSE
+    |STRING SBOPEN STRING SBCLOSE 
+    |STRING
 ;
 
 param_list:
