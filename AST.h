@@ -7,14 +7,18 @@ class AST_node ;
 class AST_prog ;                                        
 class AST_stmts ;                                         
 class AST_stmt;
+class AST_semicolon;
 class AST_keyword;
 class AST_function_decl;
 class AST_variable_decl;
 class AST_assignStmt;
+class AST_assignStmt_old;
 class AST_assignStmt_new;
 class AST_functionCall;
-class AST_functionCall_param;
+class AST_functionCall_noargs;
+class AST_functionCall_args;
 class AST_ifStmt;
+class AST_ifWEStmt;
 class AST_ifElseStmt;
 class AST_whileStmt;
 class AST_forStmt;
@@ -43,18 +47,32 @@ class AST_variable_2D_ss;
 
 union _NODE_
 {
+	char name[20];
+    int number;
+    float fnumber;
+    int bvalue;
+    char boperator[3];
+    char uoperator[3];
+    char roperator[3];
+    char aoperator[3];
+    char aboperator[3];
+    char dtype[20];
     AST_node* node;
     AST_prog* prog;
     AST_stmts* stmts;
     AST_stmt* stmt;
+    AST_semicolon* semicolon;
     AST_keyword* keyword;
     AST_function_decl* function_decl;
     AST_variable_decl* variable_decl;
     AST_assignStmt* assignStmt;
+    AST_assignStmt_old* assignStmt_old;
     AST_assignStmt_new* assignStmt_new;
     AST_functionCall* functionCall;
-    AST_functionCall_param* functionCall_param;
+    AST_functionCall_noargs* functionCall_noargs;
+    AST_functionCall_args* functionCall_args;
     AST_ifStmt* ifStmt;
+    AST_ifWEStmt* ifWEStmt;
     AST_ifElseStmt* ifElseStmt;
     AST_whileStmt* whileStmt;
     AST_forStmt* forStmt;
@@ -97,7 +115,7 @@ class AST_prog : public AST_node
 };
 
 
-class AST_stmts : public AST_node
+class AST_stmts : public AST_prog
 {
 private:
     vector<AST_stmt*> stmt_list;
@@ -110,7 +128,11 @@ class AST_stmt : public AST_node
 
 };
 
-class AST_keyword : public AST_node
+class AST_semicolon : public AST_stmt{
+
+};
+
+class AST_keyword : public AST_stmt
 {
 private:
     string keyword_type; 
@@ -141,17 +163,22 @@ public:
     AST_variable_decl(string dtype, AST_variable* variable);
 };
 
-class AST_assignStmt: public AST_stmt
+class AST_assignStmt : public AST_stmt
+{
+
+};
+
+class AST_assignStmt_old: public AST_assignStmt
 {
 private:
     AST_variable* varName;
     AST_expr* expr;
 public:
-    AST_assignStmt(AST_variable* varName, AST_expr* expr);
+    AST_assignStmt_old(AST_variable* varName, AST_expr* expr);
 
 };
 
-class AST_assignStmt_new: public AST_stmt
+class AST_assignStmt_new: public AST_assignStmt
 {
 private:
     string dtype;
@@ -162,36 +189,21 @@ public:
 
 };
 
-class AST_functionCall : public AST_stmt
-{
-private:
-    string functionName;
-    AST_param_list * param_list;
-public:
-    AST_functionCall(string functionName);
-    AST_functionCall(string functionName, AST_param_list * param_list);
-};
-
-class AST_functionCall_param : public AST_stmt
-{
-private:
-    string functionName;
-    AST_param_list * param_list;
-public:
-    AST_functionCall_param(string functionName, AST_param_list * param_list);
-};
-
-
 class AST_ifStmt : public AST_stmt
+{
+
+};
+
+class AST_ifWEStmt : public AST_ifStmt
 {
 private:
     AST_expr* expr;
     AST_stmts* ifStmts;
 public:
-    AST_ifStmt(AST_expr* expr, AST_stmts* ifStmts);
+    AST_ifWEStmt(AST_expr* expr, AST_stmts* ifStmts);
 };
 
-class AST_ifElseStmt : public AST_stmt
+class AST_ifElseStmt : public AST_ifStmt
 {
 private:
     AST_expr* expr;
@@ -276,6 +288,27 @@ public:
     AST_expr_ternary(AST_expr* expr1, AST_expr* expr2, AST_expr* expr3);
 };
 
+class AST_functionCall : public AST_expr
+{
+
+};
+
+class AST_functionCall_noargs : public AST_functionCall
+{
+private:
+    string functionName;
+public:
+    AST_functionCall_noargs(string functionName);
+};
+
+class AST_functionCall_args : public AST_functionCall
+{
+private:
+    string functionName;
+    AST_param_list * param_list;
+public:
+    AST_functionCall_args(string functionName, AST_param_list * param_list);
+};
 
 class AST_paramD_list : public AST_node
 {
@@ -332,7 +365,7 @@ public:
     AST_float(float value);
 };
 
-class AST_variable : AST_param
+class AST_variable : public AST_param
 {
 
 };

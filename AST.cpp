@@ -40,7 +40,9 @@ AST_variable_decl::AST_variable_decl(string dtype, AST_variable* variable)
 }
 
 //assignStmt
-AST_assignStmt::AST_assignStmt(AST_variable* varName, AST_expr* expr)
+
+//assignStmt_old
+AST_assignStmt_old::AST_assignStmt_old(AST_variable* varName, AST_expr* expr)
 {
     this->varName = varName;
     this->expr = expr;
@@ -55,20 +57,24 @@ AST_assignStmt_new::AST_assignStmt_new(string dtype, AST_variable* varName, AST_
 }
 
 //functionCall 
-AST_functionCall::AST_functionCall(string functionName)
+
+//functionCall_noargs;
+AST_functionCall_noargs::AST_functionCall_noargs(string functionName)
 {
     this->functionName = functionName;
 }
 
 //functionCall_param
-AST_functionCall_param::AST_functionCall_param(string functionName, AST_param_list * param_list)
+AST_functionCall_args::AST_functionCall_args(string functionName, AST_param_list * param_list)
 {
     this->functionName = functionName;
     this->param_list = param_list;
 }
 
 //ifStmt
-AST_ifStmt::AST_ifStmt(AST_expr* expr, AST_stmts* ifStmts)
+
+//ifWEStmt
+AST_ifWEStmt::AST_ifWEStmt(AST_expr* expr, AST_stmts* ifStmts)
 {
     this->expr = expr;
     this->ifStmts = ifStmts;

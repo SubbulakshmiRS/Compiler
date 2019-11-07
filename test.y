@@ -5,7 +5,7 @@
 #include "AST.h"
 
 int yylex (void);
-int yyerror (char *s);
+void yyerror (char const *s);
 
 FILE * flex_output;
 FILE * bison_output;
@@ -57,19 +57,6 @@ AST_prog * main_program;
 %token OUTPUT CBOPEN CBCLOSE QMARK
 %token COLON EQUAL COMMA IF ELSE ENDIF WHILE FOR SBOPEN SBCLOSE
 
-%union{
-	  char name[20];
-    int number;
-    float fnumber;
-    int bvalue;
-    char boperator[3];
-    char uoperator[3];
-    char roperator[3];
-    char aoperator[3];
-    char aboperator[3];
-    char dtype[20];
-}
-
 %%
 
 prog:
@@ -101,9 +88,6 @@ stmt:
     |assignStmt{
         $$ = $1;
     }
-    |functionCall SEMICOLON{
-        $$ = $1;
-    }
     |ifStmt{
         $$ = $1;
     }
@@ -126,7 +110,8 @@ stmt:
         $$ = new AST_outputStmt($3);
     }
     |SEMICOLON{
-        $$ = new AST_int(1);
+        //need a hack 
+        $$ = new AST_semicolon();
     }
 ;
 
@@ -189,7 +174,7 @@ expr:
 
 assignStmt: 
     variable EQUAL expr SEMICOLON{
-        $$ = new AST_assignStmt($1,$3);
+        $$ = new AST_assignStmt_old($1,$3);
     }
     |DTYPE variable EQUAL expr SEMICOLON{
         $$ = new AST_assignStmt_new(string($1),$2,$4);
@@ -198,16 +183,16 @@ assignStmt:
 
 functionCall:
     STRING BOPEN BCLOSE{
-        $$ = new AST_functionCall(string($1));
+        $$ = new AST_functionCall_noargs(string($1));
     }
     |STRING BOPEN param_list BCLOSE{
-        $$ = new AST_functionCall(string($1),$3);
+        $$ = new AST_functionCall_args(string($1),$3);
     }
 ;
 
 ifStmt:
     IF BOPEN expr BCLOSE CBOPEN stmts CBCLOSE ENDIF{
-        $$ = new AST_ifStmt($3, $6);
+        $$ = new AST_ifWEStmt($3, $6);
     }
     |IF BOPEN expr BCLOSE CBOPEN stmts CBCLOSE ELSE CBOPEN stmts CBCLOSE ENDIF{
         $$ = new AST_ifElseStmt($3, $6, $10);
@@ -296,10 +281,11 @@ paramD:
 
 %%
 
-int yyerror(char *s)
+void yyerror (char const *s)
 {
-	printf("Syntax Error on line %s\n", s);
-	return 0;
+        fprintf (stderr, "----------------ERROR----------------\n");
+        fprintf (stderr, "%s\n", s);
+        fprintf (stderr, "----------------ERROR----------------\n");
 }
 
 int main(int argc, char *argv[])
