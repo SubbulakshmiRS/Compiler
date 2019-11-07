@@ -3,7 +3,11 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "AST.h"
 #include "test.tab.h"
+extern FILE * flex_output;
+extern union _NODE_ yylval;
+
 void showError();
 %}
 
@@ -28,7 +32,7 @@ alpha       ([a-zA-Z])+
 "*"|"/"   {sscanf(yytext, "%s", yylval.aboperator); return (ABOP);}
 "&&"|"||"   {sscanf(yytext, "%s", yylval.boperator); return (BOP);}  
 "!"  {sscanf(yytext, "%s", yylval.uoperator);return (UOP);}
-int|bool|float|char|string|void  {sscanf(yytext, "%s", yylval.dtype); return (DTYPE);}
+int|bool|float|char|string|void  { yylval.dtype = strdup(yytext);return (DTYPE);}
 while   {return (WHILE);}
 for     {return (FOR);}
 if      {return (IF);}
