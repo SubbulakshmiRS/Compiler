@@ -2,6 +2,8 @@
 
 Parser created by flex and bison is used to check a given code ending with $. When code accepted, parser prints "Successful parsing". AST tree construction is also done and a recursive tree is created. The tree traversal is also printed. Some acceptable codes are written down.
 
+#
+
 ## LANGAUGE
 The language follows the below features 
 
@@ -19,6 +21,7 @@ The language follows the below features
 
 **I/O Routines:** Output, Input
 
+#
 
 ## FILES
 
@@ -33,6 +36,7 @@ The language follows the below features
 **test.y** : Bison file for my language (contains Macro syntax)
 
 **Makefile** : Makefile containing all commands to run the parser
+#
 
 ## USAGE
 
@@ -40,8 +44,9 @@ The language follows the below features
 make
 ./test input.txt
 ```
+#
 
-## EXAMPLES
+## EXAMPLES CODES
 a=-1; $
 
 a=1; $
@@ -64,6 +69,32 @@ for(i=1;i<2;i=i+1;){ int a=1;a=a+1;} $
 
 int add(int a , int b){ return (a+b) ;}$
 
-add(1 , 2 , 3); $
+int sum = add(1 , 2 , 3); $
 
 int add(int a , int b){ return add(a , 0); } $
+#
+
+
+## EXAMPLE OUTPUT
+### Input : a=-1; $
+
+variable_0d
+
+variable
+
+int
+
+param
+
+-
+
+assignStmt_Old
+
+assignStmt
+
+stmt
+
+Successful parsing
+
+
+RETURN VALUE : 0

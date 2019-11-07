@@ -195,7 +195,7 @@ AST_variable_0D::AST_variable_0D(string variableName)
 }
 
 //variable_1D
-AST_variable_1D_s::AST_variable_1D_s(string variableName, string index)
+AST_variable_1D_v::AST_variable_1D_v(string variableName, AST_variable_0D* index)
 {
     this->variableName = variableName;
     this->index = index;
@@ -213,19 +213,19 @@ AST_variable_2D_ii::AST_variable_2D_ii(string variableName, int index1,int index
     this->index1 = index1;
     this->index2 = index2;
 }
-AST_variable_2D_is::AST_variable_2D_is(string variableName, int index1,string index2)
+AST_variable_2D_iv::AST_variable_2D_iv(string variableName, int index1,AST_variable_0D* index2)
 {
     this->variableName = variableName;
     this->index1 = index1;
     this->index2 = index2;
 }
-AST_variable_2D_si::AST_variable_2D_si(string variableName, string index1,int index2)
+AST_variable_2D_vi::AST_variable_2D_vi(string variableName, AST_variable_0D* index1,int index2)
 {
     this->variableName = variableName;
     this->index1 = index1;
     this->index2 = index2;
 }
-AST_variable_2D_ss::AST_variable_2D_ss(string variableName, string index1,string index2)
+AST_variable_2D_vv::AST_variable_2D_vv(string variableName, AST_variable_0D* index1,AST_variable_0D* index2)
 {
     this->variableName = variableName;
     this->index1 = index1;

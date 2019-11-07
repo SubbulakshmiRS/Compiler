@@ -39,11 +39,11 @@ class AST_float;
 class AST_variable;
 class AST_variable_0D;
 class AST_variable_1D_i;
-class AST_variable_1D_s;
+class AST_variable_1D_v;
 class AST_variable_2D_ii;
-class AST_variable_2D_is;
-class AST_variable_2D_si;
-class AST_variable_2D_ss;
+class AST_variable_2D_iv;
+class AST_variable_2D_vi;
+class AST_variable_2D_vv;
 
 union _NODE_
 {
@@ -93,11 +93,11 @@ union _NODE_
     AST_variable* variable;
     AST_variable_0D* variable_0D;
     AST_variable_1D_i* variable_1D_i;
-    AST_variable_1D_s* variable_1D_s;
+    AST_variable_1D_v* variable_1D_v;
     AST_variable_2D_ii* variable_2D_ii;
-    AST_variable_2D_is* variable_2D_is;
-    AST_variable_2D_si* variable_2D_si;
-    AST_variable_2D_ss* variable_2D_ss;
+    AST_variable_2D_iv* variable_2D_is;
+    AST_variable_2D_vi* variable_2D_vi;
+    AST_variable_2D_vv* variable_2D_vv;
 
 };
 
@@ -378,13 +378,13 @@ public:
     AST_variable_0D(string variableName);
 };
 
-class AST_variable_1D_s : public AST_variable
+class AST_variable_1D_v : public AST_variable
 {
 private:
     string variableName;
-    string index;
+    AST_variable_0D* index;
 public:
-    AST_variable_1D_s(string variableName, string index);
+    AST_variable_1D_v(string variableName, AST_variable_0D* index);
 };
 
 class AST_variable_1D_i : public AST_variable
@@ -405,31 +405,31 @@ public:
     AST_variable_2D_ii(string variableName, int index1,int index2);
 };
 
-class AST_variable_2D_is : public AST_variable
+class AST_variable_2D_iv : public AST_variable
 {
 private:
     string variableName;
     int index1;
-    string index2;
+    AST_variable_0D* index2;
 public:
-    AST_variable_2D_is(string variableName, int index1,string index2);
+    AST_variable_2D_iv(string variableName, int index1,AST_variable_0D* index2);
 };
 
-class AST_variable_2D_si : public AST_variable
+class AST_variable_2D_vi : public AST_variable
 {
 private:
     string variableName;
-    string index1;
+    AST_variable_0D* index1;
     int index2;
 public:
-    AST_variable_2D_si(string variableName, string index1, int index2);
+    AST_variable_2D_vi(string variableName, AST_variable_0D* index1, int index2);
 };
 
-class AST_variable_2D_ss : public AST_variable
+class AST_variable_2D_vv : public AST_variable
 {
 private:
     string variableName;
-    string index1,index2;
+    AST_variable_0D* index1,*index2;
 public:
-    AST_variable_2D_ss(string variableName, string index1,string index2);
+    AST_variable_2D_vv(string variableName, AST_variable_0D* index1,AST_variable_0D* index2);
 };

@@ -26,6 +26,7 @@ AST_prog * main_program;
 %type<whileStmt>whileStmt
 %type<forStmt>forStmt
 %type<variable>variable
+%type<variable_0D>variable_0D
 %type<paramD_list>paramD_list
 %type<param_list>param_list
 %type<paramD>paramD
@@ -146,8 +147,8 @@ function_decl:
         $$ = new AST_function_decl($1,string($2),$4 , $7);
         printf("\nfunction_decl");
     }
-
 ;
+
 variable_decl:
     DTYPE variable SEMICOLON{
         $$ = new AST_variable_decl(string($1),$2);
@@ -220,11 +221,11 @@ functionCall:
 ;
 
 ifStmt:
-    IF BOPEN expr BCLOSE CBOPEN stmts CBCLOSE ENDIF{
+    IF BOPEN expr BCLOSE CBOPEN stmts CBCLOSE{
         $$ = new AST_ifWEStmt($3, $6);
         printf("\nifWEStmt");
     }
-    |IF BOPEN expr BCLOSE CBOPEN stmts CBCLOSE ELSE CBOPEN stmts CBCLOSE ENDIF{
+    |IF BOPEN expr BCLOSE CBOPEN stmts CBCLOSE ELSE CBOPEN stmts CBCLOSE{
         $$ = new AST_ifElseStmt($3, $6, $10);
         printf("\nifElseStmt");
     }
@@ -249,35 +250,42 @@ variable:
         $$ = new AST_variable_2D_ii(string($1),int($3),int($6));
         printf("\nvariable_2d");
     }
-    |STRING SBOPEN INT SBCLOSE SBOPEN STRING SBCLOSE{
-        $$ = new AST_variable_2D_is(string($1),int($3),string($6));
+    |STRING SBOPEN INT SBCLOSE SBOPEN variable_0D SBCLOSE{
+        $$ = new AST_variable_2D_iv(string($1),int($3),$6);
         printf("\nvariable_2d");                       
     }
-    |STRING SBOPEN STRING SBCLOSE SBOPEN INT SBCLOSE{
-        $$ = new AST_variable_2D_si(string($1),string($3),int($6));
+    |STRING SBOPEN variable_0D SBCLOSE SBOPEN INT SBCLOSE{
+        $$ = new AST_variable_2D_vi(string($1),$3,int($6));
         printf("\nvariable_2d");
     }
-    |STRING SBOPEN STRING SBCLOSE SBOPEN STRING SBCLOSE{
-        $$ = new AST_variable_2D_ss(string($1),string($3),string($6));
+    |STRING SBOPEN variable_0D SBCLOSE SBOPEN variable_0D SBCLOSE{
+        $$ = new AST_variable_2D_vv(string($1),$3,$6);
         printf("\nvariable_2d");
     }
     |STRING SBOPEN INT SBCLOSE{
         $$ = new AST_variable_1D_i(string($1),int($3));
         printf("\nvariable_1d");
     }
-    |STRING SBOPEN STRING SBCLOSE{
-        $$ = new AST_variable_1D_s(string($1),string($3));
+    |STRING SBOPEN variable_0D SBCLOSE{
+        $$ = new AST_variable_1D_v(string($1),$3);
         printf("\nvariable_2d");
     }
-    |STRING{
-        $$ = new AST_variable_0D(string($1));
-        printf("\nvariable_0d");
+    |variable_0D{
+        $$ = $1;
+        printf("\nvariable");
     }
 ;
 
+variable_0D:
+    STRING{
+            $$ = new AST_variable_0D(string($1));
+            printf("\nvariable_0d");
+        }
+;
+
 param_list:
-    param COMMA param_list{
-        $$->push_back($1);
+    param_list COMMA param{
+        $$->push_back($3);
         printf("\nparam_list");
     } 
     |param{
@@ -307,8 +315,8 @@ param:
 ;
 
 paramD_list:
-    paramD COMMA paramD_list{
-        $$->push_back($1);
+    paramD_list COMMA paramD {
+        $$->push_back($3);
         printf("\nparamD_list");
     }  
     |paramD{

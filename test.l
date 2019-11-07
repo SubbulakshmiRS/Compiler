@@ -35,8 +35,7 @@ int|bool|float|char|string|void  {sscanf(yytext, "%s", yylval.dtype); return (DT
 while   {return (WHILE);}
 for     {return (FOR);}
 if      {return (IF);}
-else    {return (WHILE);} 
-endif   {return (ENDIF);}  
+else    {return (WHILE);}   
 input   {return (INPUT);}
 output  {return (OUTPUT);}
 return  {return (RETURN);}
