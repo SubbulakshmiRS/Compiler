@@ -5,7 +5,6 @@
 
 #include "AST.h"
 #include "test.tab.h"
-extern FILE * flex_output;
 extern union _NODE_ yylval;
 
 void showError();

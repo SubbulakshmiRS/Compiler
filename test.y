@@ -4,11 +4,9 @@
 
 #include "AST.h"
 
+extern FILE *yyin;
 int yylex (void);
 void yyerror (char const *s);
-
-FILE * flex_output;
-FILE * bison_output;
 
 extern union _NODE_ yylval;
 AST_prog * main_program;
@@ -70,10 +68,12 @@ prog:
 stmts:
     stmts stmt{
         $$->push_back($2);
+        printf("\nstmts");
     }
     |stmt{
         $$ = new AST_stmts();
         $$->push_back($1);
+        printf("\nstmt");
     }
 
 ;
@@ -81,192 +81,240 @@ stmts:
 stmt:
     function_decl{
         $$ = $1;
+        printf("\nfunction_decl");
     }
     |variable_decl{
         $$ = $1;
+        printf("\nvariable_decl");
     }
     |assignStmt{
         $$ = $1;
+        printf("\nassignStmt");
     }
     |ifStmt{
         $$ = $1;
+        printf("\nifStmt");
     }
     |whileStmt{
         $$ = $1;
+        printf("\nwhileStmt");
     }
     |forStmt{
         $$ = $1;
+        printf("\nforStmt");
     }
     |keyword SEMICOLON{
         $$ = $1;
+        printf("\nkeyword");
     }
     |RETURN expr SEMICOLON{
         $$ = new AST_returnStmt($2);
+        printf("\nreturnStmt");
     }
     |INPUT BOPEN variable BCLOSE SEMICOLON{
         $$ = new AST_inputStmt($3);
+        printf("\ninputStmt");
     }
     |OUTPUT BOPEN variable BCLOSE SEMICOLON{
         $$ = new AST_outputStmt($3);
+        printf("\noutputStmt");
     }
     |SEMICOLON{
         //need a hack 
         $$ = new AST_semicolon();
+        printf("\nsemicolon");
     }
 ;
 
 keyword:
     BREAK{
         $$ = new AST_keyword("BREAK");
+        printf("\nbreak");
     }
     |CONTINUE{
         $$ = new AST_keyword("CONTINUE");
+        printf("\ncontinue");
     }
     |RETURN{
         $$ = new AST_keyword("RETURN");
+        printf("\nreturn");
     }
 ;
 
 function_decl:
     DTYPE STRING BOPEN paramD_list BCLOSE CBOPEN stmts CBCLOSE{
         $$ = new AST_function_decl($1,string($2),$4 , $7);
+        printf("\nfunction_decl");
     }
 
 ;
 variable_decl:
     DTYPE variable SEMICOLON{
         $$ = new AST_variable_decl(string($1),$2);
+        printf("\nvariable_decl");
     }
 ;
 
 expr: 
     UOP expr %prec UOP{
         $$ = new AST_expr_unary("UOP",$2);
+        printf("\n%s",$1);
     }
     |expr BOP expr %prec BOP{
         $$ = new AST_expr_binary($1,"BOP",$3);
+        printf("\n%s",$2);
     }
     |expr QMARK expr COLON expr %prec QMARK{
         $$ = new AST_expr_ternary($1,$3,$5);
+        printf("\n?:");
     }
     |expr ROP expr{
         $$ = new AST_expr_binary($1,"ROP",$3);
+        printf("\n%s",$2);
     }
     |expr AOP expr{
         $$ = new AST_expr_binary($1,"AOP",$3);
+        printf("\n%s",$2);
     }
     |expr ABOP expr{
         $$ = new AST_expr_binary($1,"ABOP",$3);
+        printf("\n%s",$2);
     }
     |BOPEN expr BCLOSE{
         $$ = $2;
     }
     |AOP expr %prec U{
         $$ = new AST_expr_unary("AOP",$2);
+        printf("\n%s",$1);
     }
     |param{
         $$ = $1;
+        printf("\nparam");
     }
     |functionCall{
         $$ = $1;
+        printf("\nfuntionCall");
     }
 ;
 
 assignStmt: 
     variable EQUAL expr SEMICOLON{
         $$ = new AST_assignStmt_old($1,$3);
+        printf("\nassignStmt_Old");
     }
     |DTYPE variable EQUAL expr SEMICOLON{
         $$ = new AST_assignStmt_new(string($1),$2,$4);
+        printf("\nassignStmt_new");
     }
 ;
 
 functionCall:
     STRING BOPEN BCLOSE{
         $$ = new AST_functionCall_noargs(string($1));
+        printf("\nfuntionCall_noargs");
     }
     |STRING BOPEN param_list BCLOSE{
         $$ = new AST_functionCall_args(string($1),$3);
+        printf("\nfunctionCall_args");
     }
 ;
 
 ifStmt:
     IF BOPEN expr BCLOSE CBOPEN stmts CBCLOSE ENDIF{
         $$ = new AST_ifWEStmt($3, $6);
+        printf("\nifWEStmt");
     }
     |IF BOPEN expr BCLOSE CBOPEN stmts CBCLOSE ELSE CBOPEN stmts CBCLOSE ENDIF{
         $$ = new AST_ifElseStmt($3, $6, $10);
+        printf("\nifElseStmt");
     }
 ;
 
 whileStmt:
     WHILE BOPEN expr BCLOSE CBOPEN stmts CBCLOSE{
         $$ = new AST_whileStmt($3, $6);
+        printf("\nwhileStmt");
     }
 ;
 
 forStmt:
     FOR BOPEN assignStmt expr SEMICOLON assignStmt BCLOSE CBOPEN stmts CBCLOSE{
         $$ = new AST_forStmt($3,$4,$6,$9);
+        printf("\nforStmt");
     }
 ;
 
 variable:
     STRING SBOPEN INT SBCLOSE SBOPEN INT SBCLOSE{
         $$ = new AST_variable_2D_ii(string($1),int($3),int($6));
+        printf("\nvariable_2d");
     }
     |STRING SBOPEN INT SBCLOSE SBOPEN STRING SBCLOSE{
-        $$ = new AST_variable_2D_is(string($1),int($3),string($6));                       
+        $$ = new AST_variable_2D_is(string($1),int($3),string($6));
+        printf("\nvariable_2d");                       
     }
     |STRING SBOPEN STRING SBCLOSE SBOPEN INT SBCLOSE{
         $$ = new AST_variable_2D_si(string($1),string($3),int($6));
+        printf("\nvariable_2d");
     }
     |STRING SBOPEN STRING SBCLOSE SBOPEN STRING SBCLOSE{
         $$ = new AST_variable_2D_ss(string($1),string($3),string($6));
+        printf("\nvariable_2d");
     }
     |STRING SBOPEN INT SBCLOSE{
         $$ = new AST_variable_1D_i(string($1),int($3));
+        printf("\nvariable_1d");
     }
     |STRING SBOPEN STRING SBCLOSE{
         $$ = new AST_variable_1D_s(string($1),string($3));
+        printf("\nvariable_2d");
     }
     |STRING{
         $$ = new AST_variable_0D(string($1));
+        printf("\nvariable_0d");
     }
 ;
 
 param_list:
     param COMMA param_list{
         $$->push_back($1);
+        printf("\nparam_list");
     } 
     |param{
         $$ = new AST_param_list();
-        $$->push_back($1);       
+        $$->push_back($1);
+        printf("\nparam");       
     }
 ;
 
 param:
     variable{
         $$ = $1;
+        printf("\nvariable");
     }
     |INT{
         $$ = new AST_int($1);
+        printf("\nint");
     }
     |BOOL{
         $$ = new AST_bool($1);
+        printf("\nbool");
     }
     |FLOAT{
         $$ = new AST_float($1);
+        printf("\nfloat");
     }
 ;
 
 paramD_list:
     paramD COMMA paramD_list{
         $$->push_back($1);
+        printf("\nparamD_list");
     }  
     |paramD{
         $$ = new AST_paramD_list();
         $$->push_back($1);
+        printf("\nparamD");
     }
 ;
 
@@ -274,6 +322,7 @@ paramD_list:
 paramD:
     DTYPE param{
         $$ = new AST_paramD(string($1),$2);
+        printf("\nparam");
     }
 ;
 
@@ -301,11 +350,9 @@ int main(int argc, char *argv[])
 	}
 
 
-    flex_output = fopen("flex_output.txt", "w");
-    bison_output = fopen("bison_output.txt", "w");
-
+    yyin = fopen(argv[1], "r");
 	int return_val = yyparse();
-    fprintf(bison_output, "\nRETURN VALUE : %d\n", return_val);
+    printf("\nRETURN VALUE : %d\n", return_val);
 
     /*Traverse v;
     main_program->accept(v);*/

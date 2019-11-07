@@ -1,6 +1,6 @@
 # PARSER
 
-Parser created by flex and bison is used to check a given code ending with $. When code accepted, parser prints "Successful parsing". Some acceptable codes are written down.
+Parser created by flex and bison is used to check a given code ending with $. When code accepted, parser prints "Successful parsing". AST tree construction is also done and a recursive tree is created. The tree traversal is also printed. Some acceptable codes are written down.
 
 ## LANGAUGE
 The language follows the below features 
@@ -22,6 +22,12 @@ The language follows the below features
 
 ## FILES
 
+**input.txt** : contains the code to be scanned, parsed and the AST tree is constructed and its traversal printed
+
+**AST.cpp** : AST construction with all definitions of classes
+
+**AST.h** : AST construction header file with all class declarations
+
 **test.l** : Flex file for my language (contains Micro syntax)
 
 **test.y** : Bison file for my language (contains Macro syntax)
@@ -32,7 +38,7 @@ The language follows the below features
 
 ```
 make
-./test
+./test input.txt
 ```
 
 ## EXAMPLES
