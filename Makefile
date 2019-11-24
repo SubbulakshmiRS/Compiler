@@ -6,7 +6,7 @@ test.tab.c test.tab.h:	test.y AST.cpp AST.h
 lex.yy.c: test.l test.tab.h AST.cpp AST.h
 	flex test.l
 
-AST.o: AST.cpp AST.h
+AST.o: AST.cpp AST.h 
 	g++ -std=c++14 -c AST.cpp
 
 test: lex.yy.c test.tab.c test.tab.h AST.o
