@@ -1,3 +1,4 @@
+//stmts
 void Traverse::visit(AST_stmts * stmts)
 {
     cout << "stmts" << endl;

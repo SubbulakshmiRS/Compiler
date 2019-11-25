@@ -107,8 +107,6 @@ typedef union _NODE_ YYSTYPE;
 class Visitor
 {
 public:
-    virtual void visit(AST_node *) = 0;
-    virtual void visit(AST_prog *) = 0;
     virtual void visit(AST_stmts *) = 0;
 
     virtual void visit(AST_function_decl *) = 0;
@@ -117,7 +115,6 @@ public:
     virtual void visit(AST_keyword* ) = 0;
     virtual void visit(AST_assignStmt_old *) = 0;
     virtual void visit(AST_assignStmt_new *) = 0;
-    virtual void visit(AST_ifStmt *) = 0;
     virtual void visit(AST_ifWEStmt *) = 0;
     virtual void visit(AST_ifElseStmt *) = 0;
     virtual void visit(AST_whileStmt *) = 0;
