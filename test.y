@@ -9,7 +9,7 @@ int yylex (void);
 void yyerror (char const *s);
 
 extern union _NODE_ yylval;
-AST_prog * main_program;
+AST_stmts * main_program;
 
 %}
 
@@ -60,20 +60,20 @@ AST_prog * main_program;
 prog:
     stmts STOP{
     $$ = $1;
-    main_program = $$;
-    printf("\nSuccessful parsing\n");
+    main_program = $1;
+    //printf("\nSuccessful parsing\n");
   }
 ;
 
 stmts:
     stmts stmt{
         $$->push_back($2);
-        printf("\nstmts");
+        //printf("\nstmts");
     }
     |stmt{
         $$ = new AST_stmts();
         $$->push_back($1);
-        printf("\nstmt");
+        //printf("\nstmt");
     }
 
 ;
@@ -81,148 +81,148 @@ stmts:
 stmt:
     function_decl{
         $$ = $1;
-        printf("\nfunction_decl");
+        //printf("\nfunction_decl");
     }
     |variable_decl{
         $$ = $1;
-        printf("\nvariable_decl");
+        //printf("\nvariable_decl");
     }
     |assignStmt{
         $$ = $1;
-        printf("\nassignStmt");
+        //printf("\nassignStmt");
     }
     |ifStmt{
         $$ = $1;
-        printf("\nifStmt");
+        //printf("\nifStmt");
     }
     |whileStmt{
         $$ = $1;
-        printf("\nwhileStmt");
+        //printf("\nwhileStmt");
     }
     |forStmt{
         $$ = $1;
-        printf("\nforStmt");
+        //printf("\nforStmt");
     }
     |keyword SEMICOLON{
         $$ = $1;
-        printf("\nkeyword");
+        //printf("\nkeyword");
     }
     |RETURN expr SEMICOLON{
         $$ = new AST_returnStmt($2);
-        printf("\nreturnStmt");
+        //printf("\nreturnStmt");
     }
     |INPUT BOPEN variable BCLOSE SEMICOLON{
         $$ = new AST_inputStmt($3);
-        printf("\ninputStmt");
+        //printf("\ninputStmt");
     }
     |OUTPUT BOPEN variable BCLOSE SEMICOLON{
         $$ = new AST_outputStmt($3);
-        printf("\noutputStmt");
+        //printf("\noutputStmt");
     }
     |SEMICOLON{
         //need a hack 
         $$ = new AST_semicolon();
-        printf("\nsemicolon");
+        //printf("\nsemicolon");
     }
 ;
 
 keyword:
     BREAK{
         $$ = new AST_keyword("BREAK");
-        printf("\nbreak");
+        //printf("\nbreak");
     }
     |CONTINUE{
         $$ = new AST_keyword("CONTINUE");
-        printf("\ncontinue");
+        //printf("\ncontinue");
     }
     |RETURN{
         $$ = new AST_keyword("RETURN");
-        printf("\nreturn");
+        //printf("\nreturn");
     }
 ;
 
 function_decl:
     DTYPE STRING BOPEN paramD_list BCLOSE CBOPEN stmts CBCLOSE{
         $$ = new AST_function_decl($1,string($2),$4 , $7);
-        printf("\nfunction_decl");
+        //printf("\nfunction_decl");
     }
 ;
 
 variable_decl:
     DTYPE variable SEMICOLON{
         $$ = new AST_variable_decl(string($1),$2);
-        printf("\nvariable_decl");
+        //printf("\nvariable_decl");
     }
 ;
 
 expr: 
     UOP expr %prec UOP{
         $$ = new AST_expr_unary("UOP",$2);
-        printf("\n%s",$1);
+        //printf("\n%s",$1);
     }
     |expr BOP expr %prec BOP{
         $$ = new AST_expr_binary($1,"BOP",$3);
-        printf("\n%s",$2);
+        //printf("\n%s",$2);
     }
     |expr QMARK expr COLON expr %prec QMARK{
         $$ = new AST_expr_ternary($1,$3,$5);
-        printf("\n?:");
+        //printf("\n?:");
     }
     |expr ROP expr{
         $$ = new AST_expr_binary($1,"ROP",$3);
-        printf("\n%s",$2);
+        //printf("\n%s",$2);
     }
     |expr AOP expr{
         $$ = new AST_expr_binary($1,"AOP",$3);
-        printf("\n%s",$2);
+        //printf("\n%s",$2);
     }
     |expr ABOP expr{
         $$ = new AST_expr_binary($1,"ABOP",$3);
-        printf("\n%s",$2);
+        //printf("\n%s",$2);
     }
     |BOPEN expr BCLOSE{
         $$ = $2;
     }
     |AOP expr %prec U{
         $$ = new AST_expr_unary("AOP",$2);
-        printf("\n%s",$1);
+        //printf("\n%s",$1);
     }
     |param{
         $$ = $1;
-        printf("\nparam");
+        //printf("\nparam");
     }
     |functionCall{
         $$ = $1;
-        printf("\nfuntionCall");
+        //printf("\nfuntionCall");
     }
 ;
 
 assignStmt: 
     variable EQUAL expr SEMICOLON{
         $$ = new AST_assignStmt_old($1,$3);
-        printf("\nassignStmt_Old");
+        //printf("\nassignStmt_Old");
     }
     |DTYPE variable EQUAL expr SEMICOLON{
         $$ = new AST_assignStmt_new(string($1),$2,$4);
-        printf("\nassignStmt_new");
+        //printf("\nassignStmt_new");
     }
 ;
 
 functionCall:
     STRING BOPEN BCLOSE{
         $$ = new AST_functionCall_noargs(string($1));
-        printf("\nfuntionCall_noargs");
+        //printf("\nfuntionCall_noargs");
     }
     |STRING BOPEN param_list BCLOSE{
         $$ = new AST_functionCall_args(string($1),$3);
-        printf("\nfunctionCall_args");
+        //printf("\nfunctionCall_args");
     }
 ;
 
 ifStmt:
     IF BOPEN expr BCLOSE CBOPEN stmts CBCLOSE ELSE CBOPEN stmts CBCLOSE SEMICOLON{
         $$ = new AST_ifElseStmt($3, $6, $10);
-        printf("\nifElseStmt");
+        //printf("\nifElseStmt");
     }
     |IF BOPEN expr BCLOSE CBOPEN stmts CBCLOSE SEMICOLON{
         $$ = new AST_ifWEStmt($3, $6);
@@ -233,7 +233,7 @@ ifStmt:
 whileStmt:
     WHILE BOPEN expr BCLOSE CBOPEN stmts CBCLOSE{
         $$ = new AST_whileStmt($3, $6);
-        printf("\nwhileStmt");
+        //printf("\nwhileStmt");
     }
 ;
 
@@ -247,77 +247,77 @@ forStmt:
 variable:
     STRING SBOPEN INT SBCLOSE SBOPEN INT SBCLOSE{
         $$ = new AST_variable_2D_ii(string($1),int($3),int($6));
-        printf("\nvariable_2d");
+        //printf("\nvariable_2d");
     }
     |STRING SBOPEN INT SBCLOSE SBOPEN variable_0D SBCLOSE{
         $$ = new AST_variable_2D_iv(string($1),int($3),$6);
-        printf("\nvariable_2d");                       
+        //printf("\nvariable_2d");                       
     }
     |STRING SBOPEN variable_0D SBCLOSE SBOPEN INT SBCLOSE{
         $$ = new AST_variable_2D_vi(string($1),$3,int($6));
-        printf("\nvariable_2d");
+        //printf("\nvariable_2d");
     }
     |STRING SBOPEN variable_0D SBCLOSE SBOPEN variable_0D SBCLOSE{
         $$ = new AST_variable_2D_vv(string($1),$3,$6);
-        printf("\nvariable_2d");
+        //printf("\nvariable_2d");
     }
     |STRING SBOPEN INT SBCLOSE{
         $$ = new AST_variable_1D_i(string($1),int($3));
-        printf("\nvariable_1d");
+        //printf("\nvariable_1d");
     }
     |STRING SBOPEN variable_0D SBCLOSE{
         $$ = new AST_variable_1D_v(string($1),$3);
-        printf("\nvariable_2d");
+        //printf("\nvariable_2d");
     }
     |variable_0D{
         $$ = $1;
-        printf("\nvariable");
+        //printf("\nvariable");
     }
 ;
 
 variable_0D:
     STRING{
             $$ = new AST_variable_0D(string($1));
-            printf("\nvariable_0d");
+            //printf("\nvariable_0d");
         }
 ;
 
 param_list:
     param_list COMMA param{
         $$->push_back($3);
-        printf("\nparam_list");
+        //printf("\nparam_list");
     } 
     |param{
         $$ = new AST_param_list();
         $$->push_back($1);
-        printf("\nparam");       
+        //printf("\nparam");       
     }
 ;
 
 param:
     variable{
         $$ = $1;
-        printf("\nvariable");
+        //printf("\nvariable");
     }
     |INT{
         $$ = new AST_int($1);
-        printf("\nint");
+        //printf("\nint");
     }
     |BOOL{
         $$ = new AST_bool($1);
-        printf("\nbool");
+        //printf("\nbool");
     }
 ;
 
 paramD_list:
     paramD_list COMMA paramD {
         $$->push_back($3);
-        printf("\nparamD_list");
+        //printf("\nparamD_list");
     }  
     |paramD{
         $$ = new AST_paramD_list();
         $$->push_back($1);
-        printf("\nparamD");
+        //printf("\nparamD");
     }
 ;
 
@@ -325,7 +325,7 @@ paramD_list:
 paramD:
     DTYPE variable{
         $$ = new AST_paramD(string($1),$2);
-        printf("\nparam");
+        //printf("\nparam");
     }
 ;
 
@@ -355,9 +355,9 @@ int main(int argc, char *argv[])
 
     yyin = fopen(argv[1], "r");
 	int return_val = yyparse();
-    printf("\nRETURN VALUE : %d\n", return_val);
+    //printf("\nRETURN VALUE : %d\n", return_val);
 
-    /*Traverse v;
-    main_program->accept(v);*/
+    Traverse tv;
+    main_program->accept(tv);
     return 0;
 }
