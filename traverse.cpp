@@ -302,7 +302,7 @@ Literal Traverse::visit(AST_whileStmt *whileStmt)
     while(l.dtype == "bool" && l.value == "true")
     {
         Literal t1 = whileStmt->whileStmts->accept(*this);
-        if(t1.dtype !="None" || l.value!="")
+        if(t1.dtype !="None" || t1.value!="")
             return t1;
         l = whileStmt->expr->accept(*this);
     }
@@ -318,7 +318,7 @@ Literal Traverse::visit(AST_forStmt *forStmt)
     Literal l1 = forStmt->initialize->accept(*this);
     cout<<"for condition"<<endl;
     Literal l2 = forStmt->expr->accept(*this);
-    while(l2.dtype == "bool" && l1.value == "true")
+    while(l2.dtype == "bool" && l2.value == "true")
     {
         Literal l = forStmt->forStmts->accept(*this);
         if(l.dtype != "None" && l.value != "")
@@ -492,7 +492,6 @@ Literal Traverse::visit(AST_expr_binary *expr_binary)
         ans.dtype = "bool";
         if(l1.dtype == "int" && l2.dtype=="int")
         {
-            ans.dtype = l1.dtype;
             int a= (int)stoi(l1.value);
             int b= (int)stoi(l2.value);
             if(a >= b)
@@ -506,7 +505,6 @@ Literal Traverse::visit(AST_expr_binary *expr_binary)
         ans.dtype = "bool";
         if(l1.dtype == "int" && l2.dtype=="int")
         {
-            ans.dtype = l1.dtype;
             int a= (int)stoi(l1.value);
             int b= (int)stoi(l2.value);
             if(a > b)
@@ -520,7 +518,6 @@ Literal Traverse::visit(AST_expr_binary *expr_binary)
         ans.dtype = "bool";
         if(l1.dtype == "int" && l2.dtype=="int")
         {
-            ans.dtype = l1.dtype;
             int a= (int)stoi(l1.value);
             int b= (int)stoi(l2.value);
             if(a <= b)
@@ -531,10 +528,10 @@ Literal Traverse::visit(AST_expr_binary *expr_binary)
     }  
     else if(expr_binary->opType == "<")
     {
+        cout<<"compare "<<l1.dtype<<l1.value<<" "<<l2.dtype<<l2.value<<endl;
         ans.dtype = "bool";
         if(l1.dtype == "int" && l2.dtype=="int")
         {
-            ans.dtype = l1.dtype;
             int a= (int)stoi(l1.value);
             int b= (int)stoi(l2.value);
             if(a < b)
@@ -548,7 +545,6 @@ Literal Traverse::visit(AST_expr_binary *expr_binary)
         ans.dtype = "bool";
         if(l1.dtype == "int" && l2.dtype=="int")
         {
-            ans.dtype = l1.dtype;
             int a= (int)stoi(l1.value);
             int b= (int)stoi(l2.value);
             if(a == b)
@@ -556,7 +552,8 @@ Literal Traverse::visit(AST_expr_binary *expr_binary)
             else 
                 ans.value = "false";
         }
-    }   
+    } 
+    cout<<"ANS "<<ans.dtype<<" "<<ans.value<<endl; 
     return ans;
 }
 
