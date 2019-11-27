@@ -7,7 +7,10 @@ Literal Traverse::visit(AST_stmts * stmts)
     {
         ans = stmts->stmt_list[i]->accept(*this);
         if(ans.dtype != "None" || ans.value != "")
+        {
+            cout<<"done\n";
             return ans;
+        }
     }
     ans.dtype = "None"; ans.value = ""; return ans;  
 }
