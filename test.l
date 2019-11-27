@@ -16,7 +16,6 @@ alpha       ([a-zA-Z])+
 
 %%
 "$"     {return (STOP);}
-"="     {return (EQUAL);}
 "?"     {return (QMARK);}
 ":"     {return (COLON);}
 ","     {return (COMMA);}
@@ -26,7 +25,8 @@ alpha       ([a-zA-Z])+
 "]"     {return (SBCLOSE);}
 "{"     {return (CBOPEN);}
 "}"     {return (CBCLOSE);}
-"<"|">"|">="|"<="|"=="  {sscanf(yytext, "%s", yylval.roperator);return (ROP);}
+"<"|">"|">="|"<="|"=="   {sscanf(yytext, "%s", yylval.roperator);return (ROP);}
+"="     {return (EQUAL);}
 "+"|"-"  {sscanf(yytext, "%s", yylval.aoperator); return (AOP);}   
 "*"|"/"   {sscanf(yytext, "%s", yylval.aboperator); return (ABOP);}
 "&&"|"||"   {sscanf(yytext, "%s", yylval.boperator); return (BOP);}  
