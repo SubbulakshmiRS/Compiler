@@ -104,3 +104,5 @@ for(i=start;step;end;)
     output(arr[i]);
 }  $
 
+3)
+int a = 2 + 3; output(a); $

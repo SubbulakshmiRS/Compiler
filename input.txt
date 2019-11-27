@@ -1,1 +1,1 @@
-int a=2; if(i<1){ int i=3; output(i) ;}; $
+int a = -1; if(a<0){ output(a); } $
