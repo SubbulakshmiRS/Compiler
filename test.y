@@ -94,7 +94,7 @@ stmt:
     }
     |ifStmt{
         $$ = $1;
-        //printf("\nifStmt");
+        printf("\nifStmt");
     }
     |whileStmt{
         $$ = $1;
@@ -158,11 +158,11 @@ variable_decl:
 
 expr: 
     UOP expr %prec UOP{
-        $$ = new AST_expr_unary("UOP",$2);
+        $$ = new AST_expr_unary(string($1),$2);
         //printf("\n%s",$1);
     }
     |expr BOP expr %prec BOP{
-        $$ = new AST_expr_binary($1,"BOP",$3);
+        $$ = new AST_expr_binary($1,string($2),$3);
         //printf("\n%s",$2);
     }
     |expr QMARK expr COLON expr %prec QMARK{
@@ -170,22 +170,22 @@ expr:
         //printf("\n?:");
     }
     |expr ROP expr{
-        $$ = new AST_expr_binary($1,"ROP",$3);
+        $$ = new AST_expr_binary($1,string($2),$3);
         //printf("\n%s",$2);
     }
     |expr AOP expr{
-        $$ = new AST_expr_binary($1,"AOP",$3);
+        $$ = new AST_expr_binary($1,string($2),$3);
         //printf("\n%s",$2);
     }
     |expr ABOP expr{
-        $$ = new AST_expr_binary($1,"ABOP",$3);
+        $$ = new AST_expr_binary($1,string($2),$3);
         //printf("\n%s",$2);
     }
     |BOPEN expr BCLOSE{
         $$ = $2;
     }
     |AOP expr %prec U{
-        $$ = new AST_expr_unary("AOP",$2);
+        $$ = new AST_expr_unary(string($1),$2);
         //printf("\n%s",$1);
     }
     |param{
@@ -223,7 +223,7 @@ functionCall:
 ifStmt:
     IF BOPEN expr BCLOSE CBOPEN stmts CBCLOSE{
         $$ = new AST_ifWEStmt($3, $6);
-        //printf("\nifWEStmt");
+        printf("\nifWEStmt");
     }
     |IF BOPEN expr BCLOSE CBOPEN stmts CBCLOSE ELSE CBOPEN stmts CBCLOSE{
         $$ = new AST_ifElseStmt($3, $6, $10);
@@ -308,10 +308,6 @@ param:
         $$ = new AST_bool($1);
         //printf("\nbool");
     }
-    |FLOAT{
-        $$ = new AST_float($1);
-        //printf("\nfloat");
-    }
 ;
 
 paramD_list:
@@ -328,7 +324,7 @@ paramD_list:
 
 
 paramD:
-    DTYPE param{
+    DTYPE variable{
         $$ = new AST_paramD(string($1),$2);
         //printf("\nparam");
     }
@@ -360,9 +356,11 @@ int main(int argc, char *argv[])
 
     yyin = fopen(argv[1], "r");
 	int return_val = yyparse();
-    //printf("\nRETURN VALUE : %d\n", return_val);
+    printf("\nRETURN VALUE : %d\n", return_val);
 
     Traverse tv;
-    main_program->accept(tv);
+    cout<<"travefeds"<<endl;
+    Literal l = main_program->accept(tv);
+    cout<<"asdbj\n";
     return 0;
 }
