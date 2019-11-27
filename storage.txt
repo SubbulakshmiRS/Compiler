@@ -106,3 +106,12 @@ for(i=start;step;end;)
 
 3)
 int a = 2 + 3; output(a); $
+
+4)
+int a = -1; if(a>0){ output(a); } $
+
+5)
+for(int i=0;i<3;i=i+1;){ output(i); } $
+
+6)
+int i=0; while(i<3){ output(i); i=i+1;} $

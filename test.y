@@ -60,6 +60,7 @@ AST_stmts * main_program;
 prog:
     stmts STOP{
     $$ = $1;
+    main_program = $1;
     //printf("\nSuccessful parsing\n");
   }
 ;
@@ -72,7 +73,6 @@ stmts:
     |stmt{
         $$ = new AST_stmts();
         $$->push_back($1);
-        main_program = $$;
         //printf("\nstmt");
     }
 
