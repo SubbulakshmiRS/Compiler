@@ -239,7 +239,7 @@ whileStmt:
 ;
 
 forStmt:
-    FOR BOPEN assignStmt expr SEMICOLON assignStmt BCLOSE CBOPEN stmts CBCLOSE{
+    FOR BOPEN assignStmt INT SEMICOLON INT BCLOSE CBOPEN stmts CBCLOSE{
         $$ = new AST_forStmt($3,$4,$6,$9);
         //printf("\nforStmt");
     }
@@ -358,9 +358,11 @@ int main(int argc, char *argv[])
 	int return_val = yyparse();
     printf("\nRETURN VALUE : %d\n", return_val);
 
-    Traverse tv;
+    CodeGen g;
+    //Traverse tv;
     cout<<"travefeds"<<endl;
-    Literal l = main_program->accept(tv);
+    Value* v = main_program->accept(g);
+    g.dump();
     cout<<"asdbj\n";
     return 0;
 }
