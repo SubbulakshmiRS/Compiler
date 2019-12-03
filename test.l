@@ -26,12 +26,12 @@ alpha       ([a-zA-Z])+
 "]"     {return (SBCLOSE);}
 "{"     {return (CBOPEN);}
 "}"     {return (CBCLOSE);}
-"<"|">"|">="|"<="   {sscanf(yytext, "%s", yylval.roperator);return (ROP);}
+"<"|">"|">="|"<="|"=="  {sscanf(yytext, "%s", yylval.roperator);return (ROP);}
 "+"|"-"  {sscanf(yytext, "%s", yylval.aoperator); return (AOP);}   
 "*"|"/"   {sscanf(yytext, "%s", yylval.aboperator); return (ABOP);}
 "&&"|"||"   {sscanf(yytext, "%s", yylval.boperator); return (BOP);}  
 "!"  {sscanf(yytext, "%s", yylval.uoperator);return (UOP);}
-int|bool|float|char|string|void  {sscanf(yytext, "%s", yylval.dtype); return (DTYPE);}
+int|bool|void  {sscanf(yytext, "%s", yylval.dtype); return (DTYPE);}
 while   {return (WHILE);}
 for     {return (FOR);}
 if      {return (IF);}
@@ -42,7 +42,6 @@ return  {return (RETURN);}
 break   {return (BREAK);}
 continue    {return (CONTINUE);}
 true|false  { yylval.bvalue=0; if(yytext=="true") yylval.bvalue = 1; return (BOOL);}
-{numbers}.{numbers}     {yylval.fnumber = atof(yytext); return (FLOAT);}      
 {alpha}			   {sscanf(yytext, "%s", yylval.name); return (STRING);}
 {numbers}      {yylval.number = atoi(yytext); return (INT);}
 ";"      		   {return (SEMICOLON);}

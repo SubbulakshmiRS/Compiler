@@ -96,11 +96,12 @@ AST_whileStmt::AST_whileStmt(AST_expr* expr, AST_stmts* whileStmts)
 }
 
 //forStmt
-AST_forStmt::AST_forStmt(AST_assignStmt* initialize, AST_expr* expr, AST_assignStmt* increment, AST_stmts* forStmts)
+AST_forStmt::AST_forStmt(AST_variable* intialize_var, AST_variable* start, AST_variable*  step, AST_variable* end, AST_stmts* forStmts)
 {
-    this->initialize = initialize;
-    this->expr = expr;
-    this->increment = increment;
+    this->intialize_var = intialize_var;
+    this->start = start;
+    this->step = step;
+    this->end = end;
     this->forStmts = forStmts;
 }
 
@@ -160,10 +161,10 @@ void AST_param_list::push_back(AST_param* param)
 }
 
 //paramD
-AST_paramD::AST_paramD(string dtype, AST_param* param)
+AST_paramD::AST_paramD(string dtype, AST_variable* var)
 {
     this->dtype = dtype;
-    this->param = param;
+    this->var =  var;
 }
 
 //param

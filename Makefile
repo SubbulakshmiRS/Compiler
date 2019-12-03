@@ -13,4 +13,4 @@ test: lex.yy.c test.tab.c test.tab.h AST.o
 	g++ -std=c++14 -o test test.tab.c lex.yy.c AST.o -lfl
 
 clean:
-	rm test test.tab.c lex.yy.c test.tab.h AST.o 
+	rm test test.tab.c lex.yy.c test.tab.h test.output AST.o 

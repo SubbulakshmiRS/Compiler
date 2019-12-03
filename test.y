@@ -34,7 +34,6 @@ AST_prog * main_program;
 
 %token <name> STRING
 %token <number> INT
-%token <fnumber> FLOAT
 %token <bvalue> BOOL
 %token <boperator> BOP 
 %token <uoperator> UOP 
@@ -221,13 +220,13 @@ functionCall:
 ;
 
 ifStmt:
-    IF BOPEN expr BCLOSE CBOPEN stmts CBCLOSE{
-        $$ = new AST_ifWEStmt($3, $6);
-        printf("\nifWEStmt");
-    }
-    |IF BOPEN expr BCLOSE CBOPEN stmts CBCLOSE ELSE CBOPEN stmts CBCLOSE{
+    IF BOPEN expr BCLOSE CBOPEN stmts CBCLOSE ELSE CBOPEN stmts CBCLOSE SEMICOLON{
         $$ = new AST_ifElseStmt($3, $6, $10);
         printf("\nifElseStmt");
+    }
+    |IF BOPEN expr BCLOSE CBOPEN stmts CBCLOSE SEMICOLON{
+        $$ = new AST_ifWEStmt($3, $6);
+        printf("\nifWEStmt");
     }
 ;
 
@@ -239,8 +238,8 @@ whileStmt:
 ;
 
 forStmt:
-    FOR BOPEN assignStmt expr SEMICOLON assignStmt BCLOSE CBOPEN stmts CBCLOSE{
-        $$ = new AST_forStmt($3,$4,$6,$9);
+    FOR BOPEN variable EQUAL variable SEMICOLON variable SEMICOLON variable SEMICOLON BCLOSE CBOPEN stmts CBCLOSE{
+        $$ = new AST_forStmt($3, $5, $7,$9 , $13 );
         printf("\nforStmt");
     }
 ;
@@ -308,10 +307,6 @@ param:
         $$ = new AST_bool($1);
         printf("\nbool");
     }
-    |FLOAT{
-        $$ = new AST_float($1);
-        printf("\nfloat");
-    }
 ;
 
 paramD_list:
@@ -328,7 +323,7 @@ paramD_list:
 
 
 paramD:
-    DTYPE param{
+    DTYPE variable{
         $$ = new AST_paramD(string($1),$2);
         printf("\nparam");
     }

@@ -1,3 +1,14 @@
+1)
+int a=-1; 
+output(a);
+for( a=1;2;5;)
+{
+    output(a);
+} 
+int b;
+input(b); $
+
+2) MERGE SORT
 int merge(int arr[5], int l, int m, int r) 
 { 
 	int i;

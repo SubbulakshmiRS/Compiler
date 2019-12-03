@@ -225,12 +225,13 @@ public:
 class AST_forStmt : public AST_stmt
 {
 private:
-    AST_assignStmt* initialize;
-    AST_expr* expr;
-    AST_assignStmt* increment;
+    AST_variable* intialize_var;
+    AST_variable*  start;
+    AST_variable*  step;
+    AST_variable*  end;
     AST_stmts* forStmts;
 public:
-    AST_forStmt(AST_assignStmt* initialize, AST_expr* expr, AST_assignStmt* increment, AST_stmts* forStmts);
+    AST_forStmt(AST_variable* intialize_var, AST_variable*  start, AST_variable*  step, AST_variable*  end, AST_stmts* forStmts);
 };
 
 class AST_returnStmt : public AST_stmt
@@ -331,9 +332,9 @@ class AST_paramD : public AST_node
 {
 private:
     string dtype;
-    AST_param* param;
+    AST_variable* var;
 public:
-    AST_paramD(string dtype, AST_param* param);
+    AST_paramD(string dtype, AST_variable* var);
 };
 
 class AST_param : public AST_expr
