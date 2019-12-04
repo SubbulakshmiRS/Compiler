@@ -1,1 +1,1 @@
-int i=0; while(i<3){ output(i); i=i+1;} $
+int a = 2 + 3; output(a); $

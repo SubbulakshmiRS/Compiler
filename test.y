@@ -93,7 +93,7 @@ stmt:
     }
     |ifStmt{
         $$ = $1;
-        printf("\nifStmt");
+        //printf("\nifStmt");
     }
     |whileStmt{
         $$ = $1;
@@ -226,7 +226,7 @@ ifStmt:
     }
     |IF BOPEN expr BCLOSE CBOPEN stmts CBCLOSE SEMICOLON{
         $$ = new AST_ifWEStmt($3, $6);
-        printf("\nifWEStmt");
+        //printf("\nifWEStmt");
     }
 ;
 
@@ -240,7 +240,7 @@ whileStmt:
 forStmt:
     FOR BOPEN variable EQUAL variable SEMICOLON variable SEMICOLON variable SEMICOLON BCLOSE CBOPEN stmts CBCLOSE{
         $$ = new AST_forStmt($3, $5, $7,$9 , $13 );
-        printf("\nforStmt");
+        //printf("\nforStmt");
     }
 ;
 
@@ -358,8 +358,7 @@ int main(int argc, char *argv[])
     printf("\nRETURN VALUE : %d\n", return_val);
 
     Traverse tv;
-    cout<<"travefeds"<<endl;
     Literal l = main_program->accept(tv);
-    cout<<"asdbj\n";
+    cout<<"INTERPRETER TRAVERSE COMPLETE\n";
     return 0;
 }

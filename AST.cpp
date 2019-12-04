@@ -74,7 +74,7 @@ void AST_stmts::push_back(AST_stmt* stmt)
 }
 Literal AST_stmts::accept(Visitor & v)
 {
-    cout<<"stmts visited\n";
+    //cout<<"stmts visited\n";
     return v.visit(this);
 }
 //stmt
