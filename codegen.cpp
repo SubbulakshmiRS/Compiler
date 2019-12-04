@@ -412,7 +412,7 @@ Value* CodeGen::visit(AST_forStmt *forStmt)
         return ErrorV("ERROR:  For loop ending expr must have type integer");
     }   
 
-    llvm::AllocaInst *OldVal = NamedValues[var];
+    Value *OldVal = NamedValues[var];
     NamedValues[var] = Alloca;
 
     if (forStmt->forStmts->accept(*this) == nullptr) {

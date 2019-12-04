@@ -6,63 +6,6 @@
 using namespace std;
 #include "AST.h"
 
-// map<Variable, int> VarStore;
-// map<Function, vector<AST_variable*>> ParamStore;
-// map<Function, AST_stmts*> StmtStore;
-
-// bool Variable::operator<(const Variable& rhs) const
-// {
-//     if (this == &rhs)   // Short?cut self?comparison
-//         return false;
- 
-//     // Compare first members
-//     //
-//     if (dtype < rhs.dtype)
-//         return true;
-//     else if (rhs.dtype < dtype)
-//         return false;
- 
-//     // First members are equal, compare second members
-//     //
-//     if ((var->variableName) < rhs.var->variableName)
-//         return true;
-//     else if (rhs.var->variableName < (var->variableName))
-//         return false;
-
-//     // 2 variables cant have the same name 
-//     // All members are equal, so return false
-//     return false;
-// }
-
-// bool Function::operator<(const Function& rhs) const
-// {
-//     if (this == &rhs)   // Short?cut self?comparison
-//         return false;
- 
-//     // Compare first members
-//     //
-//     if (dtype < rhs.dtype)
-//         return true;
-//     else if (rhs.dtype < dtype)
-//         return false;
- 
-//     // First members are equal, compare second members
-//     //
-//     if (functionName < rhs.functionName)
-//         return true;
-//     else if (rhs.functionName< functionName)
-//         return false;
-
-//     if (parameters < rhs.parameters)
-//         return true;
-//     else if (rhs.parameters< parameters)
-//         return false;
-
-//     // 2 variables cant have the same name 
-//     // All members are equal, so return false
-//     return false;
-// }
-
 //node
 
 //prog
@@ -427,6 +370,5 @@ Value* AST_variable_2D_vv::accept(Visitor & v)
 
 
 //------------------------------
-//#include "traverse.cpp"
 #include "codegen.cpp"
 

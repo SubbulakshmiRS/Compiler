@@ -126,28 +126,6 @@ union _NODE_
 typedef union _NODE_ YYSTYPE;
 #define YYSTYPE_IS_DECLARED 1
 
-// struct Variable{
-//     AST_variable* var;
-//     string dtype;
-//     bool operator<(const Variable&) const;
-// };
-
-// struct Literal{
-//     string value;
-//     string dtype;
-// };
-
-// struct Function{
-//     string dtype;
-//     string functionName;
-//     vector<string> parameters;
-//     bool operator<(const Function&) const;
-// };
-
-// extern map<Variable, Literal> VarStore;
-// extern map<Function, vector<AST_variable*>> ParamStore;
-// extern map<Function, AST_stmts*> StmtStore;
-
 class Visitor
 {
 
@@ -581,5 +559,4 @@ public:
     Value* accept(Visitor &);
 };
 
-//#include "traverse.h"
 #include "codegen.h"
